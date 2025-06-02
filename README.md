@@ -1,12 +1,12 @@
 # RobotsTxtParser
 
-[![NuGet](https://img.shields.io/nuget/v/RobotsTxtParser)](https://www.nuget.org/packages/RobotsTxtParser/2025.9.2)
+[![NuGet](https://img.shields.io/nuget/v/RobotsTxtParser)](https://www.nuget.org/packages/RobotsTxtParser/2025.9.3)
 
 A simple **.NET Core 9** library for parsing `robots.txt` files.  
 Supports:
 - Reading and parsing `User-agent`, `Allow`, `Disallow`, `Crawl-delay`, and `Sitemap` directives
 - Checking whether a given URL path is allowed for a particular user-agent, with three different “Allow vs Disallow” strategies
-- Retrieving crawl-delays (as `TimeSpan`) for specified user-agents
+- Retrieving crawl-delays (as `TimeSpan`) for specified user-agents, with optional fallback overloads
 - Collecting all `Sitemap` URLs declared in a `robots.txt`
 
 The parser is fully immutable after construction and exposes a clean, intuitive API.
@@ -19,13 +19,14 @@ The parser is fully immutable after construction and exposes a clean, intuitive 
 2. [Quick Start](#quick-start)  
 3. [API Reference](#api-reference)  
    - [`Robots` class](#robots-class)  
-   - [`IRobotsParser` interface](#irobotsparser-interface)  
+   - [`I﻿RobotsParser` interface](#irobotsparser-interface)  
    - [`AllowRuleImplementation` enum](#allowruleimplementation-enum)  
    - [`Sitemap` class](#sitemap-class)  
 4. [Usage Examples](#usage-examples)  
    - [Basic “Allow/Disallow” check](#basic-allowdisallow-check)  
    - [Switching “Allow” rule strategy](#switching-allow-rule-strategy)  
    - [Crawl-delay retrieval](#crawl-delay-retrieval)  
+   - [Crawl-delay with fallback overloads](#crawl-delay-with-fallback-overloads)  
    - [Extracting all Sitemap URLs](#extracting-all-sitemap-urls)  
    - [Handling malformed lines](#handling-malformed-lines)  
 5. [Notes & Caveats](#notes--caveats)  
@@ -39,13 +40,13 @@ The parser is fully immutable after construction and exposes a clean, intuitive 
 #### Via .NET CLI
 
 ```bash
-dotnet add package RobotsTxtParser --version 2025.9.2
+dotnet add package RobotsTxtParser --version 2025.9.3
 ````
 
 #### Via Package Manager (Visual Studio)
 
 ```powershell
-Install-Package RobotsTxtParser -Version 2025.9.2
+Install-Package RobotsTxtParser -Version 2025.9.3
 ```
 
 #### Direct Reference
@@ -90,7 +91,7 @@ foreach (var site in robots.Sitemaps)
 }
 ```
 
-For more use-cases review the test units inside the `RobotsTxtParser.Tests` project.
+For more use-cases, review the test units inside the `RobotsTxtParser.Tests` project.
 
 ---
 
@@ -117,6 +118,8 @@ namespace RobotsTxtParser
         // IRobotsParser Implementation
         public bool IsPathAllowed(string userAgent, string path);
         public TimeSpan CrawlDelay(string userAgent);
+        public TimeSpan CrawlDelay(string userAgent, int fallbackAmount);
+        public TimeSpan CrawlDelay(string userAgent, TimeSpan fallbackAmount);
     }
 }
 ```
@@ -135,7 +138,13 @@ namespace RobotsTxtParser
   Returns the crawl-delay (in milliseconds, as a `TimeSpan`) for the `userAgent`.
   Throws `ArgumentException` if `userAgent` is `null`/empty/whitespace.
   If no crawl-delay rule matches, returns `TimeSpan.Zero`.
-  Tries specific rules first, then the global (`*`) rule.
+  Specific rules are checked first; if none match, the global (`*`) rule is used.
+
+* **`CrawlDelay(string userAgent, int fallbackAmount) : TimeSpan`**
+  Same as `CrawlDelay(string)`, but if no matching rule (specific or global) is found, returns `TimeSpan.FromMilliseconds(fallbackAmount)` instead of zero.
+
+* **`CrawlDelay(string userAgent, TimeSpan fallbackAmount) : TimeSpan`**
+  Same as above, but the fallback is a `TimeSpan` directly. If no rule is found, returns `fallbackAmount`.
 
 * **`Raw`**
   The unmodified string passed into `Load(...)`.
@@ -157,7 +166,7 @@ namespace RobotsTxtParser
 
 ---
 
-### `IRobotsParser` interface
+### `I﻿RobotsParser` interface
 
 ```csharp
 namespace RobotsTxtParser
@@ -166,6 +175,8 @@ namespace RobotsTxtParser
     {
         bool IsPathAllowed(string userAgent, string path);
         TimeSpan CrawlDelay(string userAgent);
+        TimeSpan CrawlDelay(string userAgent, int fallbackAmount);
+        TimeSpan CrawlDelay(string userAgent, TimeSpan fallbackAmount);
     }
 }
 ```
@@ -278,6 +289,35 @@ var empty = Robots.Load(@"User-agent: BotOnly");
 Console.WriteLine(empty.CrawlDelay("BotOnly") == TimeSpan.Zero); // True
 ```
 
+### Crawl-delay with fallback overloads
+
+```csharp
+string robotsTxt = @"
+User-agent: BotA
+Crawl-delay: 3
+
+User-agent: *
+Crawl-delay: 1
+";
+
+var robots = Robots.Load(robotsTxt);
+
+// Specific rule exists (3s):
+TimeSpan result1 = robots.CrawlDelay("BotA", 10000);
+Console.WriteLine(result1.TotalMilliseconds); // 3000
+
+// No specific for "OtherBot" → global (1s):
+TimeSpan result2 = robots.CrawlDelay("OtherBot", 5000);
+Console.WriteLine(result2.TotalMilliseconds); // 1000
+
+// If no global either, returns fallback:
+var limited = Robots.Load(@"User-agent: BotX
+Crawl-delay: 2.5");
+TimeSpan fallbackTs = TimeSpan.FromMilliseconds(750);
+TimeSpan result3 = limited.CrawlDelay("NoMatch", fallbackTs);
+Console.WriteLine(result3.TotalMilliseconds); // 750
+```
+
 ### Extracting all Sitemap URLs
 
 ```csharp
@@ -382,7 +422,3 @@ Email: desmati@gmail.com
 ```
 
 The commercial license will be provided under mutually agreed terms, which supersede AGPL-3.0 for your proprietary usage.
-
----
-
-```

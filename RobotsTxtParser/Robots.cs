@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace RobotsTxtParser;
+﻿namespace RobotsTxtParser;
 
 /// <summary>
 /// Represents the parsed contents of a robots.txt and provides methods
@@ -235,6 +231,31 @@ public class Robots : IRobotsParser
 
         // Convert Delay (milliseconds) to TimeSpan
         return chosen.Delay;
+    }
+
+
+    public TimeSpan CrawlDelay(string userAgent, int fallbackAmount)
+    {
+        var delay = CrawlDelay(userAgent);
+
+        if (delay == TimeSpan.Zero)
+        {
+            return TimeSpan.FromMilliseconds(fallbackAmount);
+        }
+
+        return delay;
+    }
+
+    public TimeSpan CrawlDelay(string userAgent, TimeSpan fallbackAmount)
+    {
+        var delay = CrawlDelay(userAgent);
+
+        if (delay == TimeSpan.Zero)
+        {
+            return fallbackAmount;
+        }
+
+        return delay;
     }
 
     // Checks if 'path' matches 'rulePath' with wildcard (*) and end-of-line ($) support.
