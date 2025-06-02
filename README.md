@@ -1,6 +1,6 @@
 # RobotsTxtParser
 
-[![NuGet](https://img.shields.io/nuget/v/RobotsTxtParser)](https://www.nuget.org/packages/RobotsTxtParser/2025.9.1)
+[![NuGet](https://img.shields.io/nuget/v/RobotsTxtParser)](https://www.nuget.org/packages/RobotsTxtParser/2025.9.2)
 
 A simple **.NET Core 9** library for parsing `robots.txt` files.  
 Supports:
@@ -39,13 +39,13 @@ The parser is fully immutable after construction and exposes a clean, intuitive 
 #### Via .NET CLI
 
 ```bash
-dotnet add package RobotsTxtParser --version 2025.9.1
+dotnet add package RobotsTxtParser --version 2025.9.2
 ````
 
 #### Via Package Manager (Visual Studio)
 
 ```powershell
-Install-Package RobotsTxtParser -Version 2025.9.1
+Install-Package RobotsTxtParser -Version 2025.9.2
 ```
 
 #### Direct Reference

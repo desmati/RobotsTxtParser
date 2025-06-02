@@ -5,14 +5,14 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<PackageId>RobotsTxtParser</PackageId>
-		<Version>2025.9.1</Version>
+		<Version>2025.9.2</Version>
 		<Authors>Hossein Esmati</Authors>
 		<Company>Nova Globen AB</Company>
 		<Description>A .NET Core 9 library for parsing robots.txt files, supporting Allow/Disallow, Crawl‐delay, and Sitemap directives.</Description>
 		<PackageProjectUrl>https://github.com/desmati/RobotsTxtParser</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/desmati/RobotsTxtParser.git</RepositoryUrl>
 		<PackageTags>robots.txt;RobotsTxtSharp;RobotsTxt;Robot Txt;Robots Txt;parser;SEO;crawler</PackageTags>
-		<PackageReleaseNotes>Initial release of RobotsTxtParser v2025.9.1 under AGPL‐3.0. Commercial licensing available via email.</PackageReleaseNotes>
+		<PackageReleaseNotes>Initial release of RobotsTxtParser v2025.9.2 under AGPL‐3.0. Commercial licensing available via email.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>RobotsTxtParser, robots.txt parser for dotnet core</Title>
 		<Copyright>AGPL‐3.0. Commercial licensing available via email.</Copyright>
