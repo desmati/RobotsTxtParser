@@ -9,7 +9,6 @@
 		<Authors>Hossein Esmati</Authors>
 		<Company>Nova Globen AB</Company>
 		<Description>A .NET Core 9 library for parsing robots.txt files, supporting Allow/Disallow, Crawl‐delay, and Sitemap directives.</Description>
-		<PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/desmati/RobotsTxtParser</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/desmati/RobotsTxtParser.git</RepositoryUrl>
 		<PackageTags>robots.txt;RobotsTxtSharp;RobotsTxt;Robot Txt;Robots Txt;parser;SEO;crawler</PackageTags>
@@ -19,25 +18,27 @@
 		<Copyright>AGPL‐3.0. Commercial licensing available via email.</Copyright>
 		<PackageIcon>logo.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<RepositoryType>git</RepositoryType>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<PackageOutputPath>../.published</PackageOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- Include in the package -->
-		<None Include="LICENSE" Pack="true" PackagePath="" />
-		<None Include="README.md" Pack="true" PackagePath="" />
-	</ItemGroup>
+		<None Include="../LICENSE" Pack="true" PackagePath="" />
+		<None Include="../README.md" Pack="true" PackagePath="" />
 
-	<ItemGroup>
-	  <None Update="logo.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	  <None Update="README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Update="logo.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Update="../README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Update="../LICENSE">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 </Project>
