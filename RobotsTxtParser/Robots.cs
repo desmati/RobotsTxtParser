@@ -90,7 +90,7 @@ public class Robots : IRobotsParser
             {
                 case LineType.UserAgent:
                     // The value of a User-agent line is the user-agent string to apply next
-                    currentUserAgent = line.Value;
+                    currentUserAgent = line.Value!;
                     break;
 
                 case LineType.Sitemap:
